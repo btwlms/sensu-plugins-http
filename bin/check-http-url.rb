@@ -284,14 +284,14 @@ class CheckHttp < Sensu::Plugin::Check::CLI
         end
       else
    puts("#{config[:scheme]} 0 #{@timestamp}" + body) unless config[:response_code]
-exit   
+exit 0  
 end
     when /^3/
       if config[:redirectok] || config[:redirectto]
         if config[:redirectok]
           # #YELLOW
  puts ("#{res.code}, #{size} bytes" + body) unless config[:response_code] # rubocop:disable BlockNesting
-       exit
+       exit 2
         elsif config[:redirectto]
           # #YELLOW
           if config[:redirectto] == res['Location'] # rubocop:disable BlockNesting
@@ -302,11 +302,11 @@ end
         end
       else
          puts("#{config[:scheme]} 1 #{@timestamp}" + body) unless config[:response_code]
-exit
+exit 2
       end
     when /^4/, /^5/
      puts("#{config[:scheme]} 1 #{@timestamp}" + body) unless config[:response_code]
-exit
+exit 2
     else
       warning(res.code + body) unless config[:response_code]
   end
